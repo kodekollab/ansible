@@ -1,0 +1,18 @@
+---
+- name: Uninstall nginx if installed
+  hosts: ubuntu
+  become: yes
+  tasks:
+    - name: Check if nginx service is running
+      service_facts:
+
+    - name: Ensure nginx packages are uninstalled
+      apt:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - nginx
+        - nginx-core
+        - nginx-full
+        - nginx-common
+      when: "'nginx' in ansible_facts.services"

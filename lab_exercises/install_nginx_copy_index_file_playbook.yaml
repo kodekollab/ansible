@@ -1,0 +1,20 @@
+---
+- name: Install nginx and copy index.html if successful
+  hosts: ubuntu
+  become: yes
+  tasks:
+    - name: Ensure nginx is installed
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+      register: nginx_installation
+
+    - name: Copy index.html to server
+      copy:
+        src: ./files/index.html
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+      when: nginx_installation is succeeded
